@@ -15,11 +15,11 @@ const url = process.env.QUERY_URL;
 
 const schedule = require('node-schedule');
 const scheduleCronstyle = () => {
-    schedule.scheduleJob('0 11 1 * * *', () => {
+    schedule.scheduleJob('0 0 11 * * *', () => {
         console.log('轮询周期到--11:00');
         getRemainPower();
     });
-    schedule.scheduleJob('0 23 1 * * *', () => {
+    schedule.scheduleJob('0 0 23 * * *', () => {
         console.log('轮询周期到--23:00');
         getRemainPower();
     });
