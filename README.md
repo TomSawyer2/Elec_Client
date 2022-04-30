@@ -27,7 +27,7 @@ const mysql = {
 module.exports = { mysql }
 ```
 
-使用dockerfile构建镜像后直接启动，进入容器`npm start`持久化
+使用dockerfile构建镜像后直接启动
 
 ## 开发
 
