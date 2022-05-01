@@ -6,20 +6,35 @@ const axios = require('axios');
 const convert = require('xml-js');
 const mysql = require('mysql');
 const db = require('./config/db');
-const connection = mysql.createConnection(db.mysql);
-connection.connect(() => {
-    console.log('Connected to MySQL');
-});
+
+let connection;
+function handleError () {
+    connection = mysql.createConnection(db.mysql);
+    connection.connect(function (err) {
+        if (err) {
+            console.log('error when connecting to db:', err);
+            setTimeout(handleError , 2000);
+        } else {
+            console.log('Connected to MySQL');
+        }
+    });
+    //监听错误
+    connection.on('error', function (err) {
+        if (err.code === 'PROTOCOL_CONNECTION_LOST') handleError();
+        else throw err;
+    });
+}
+handleError();
 
 const url = process.env.QUERY_URL;
 
 const schedule = require('node-schedule');
 const scheduleCronstyle = () => {
-    schedule.scheduleJob('0 0 11 * * *', () => {
+    schedule.scheduleJob('0 0 3 * * *', () => {
         console.log('轮询周期到--11:00');
         getRemainPower();
     });
-    schedule.scheduleJob('0 0 23 * * *', () => {
+    schedule.scheduleJob('0 0 15 * * *', () => {
         console.log('轮询周期到--23:00');
         getRemainPower();
     });
