@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "nodemon index.js",
     "start": "pm2 start ./config/pm2.json",
-    "stop": "pm2 stop elec_bot",
-    "restart": "pm2 restart elec_bot",
-    "log": "pm2 logs --lines 200 elec_bot"
+    "stop": "pm2 stop elec_bot_client",
+    "restart": "pm2 restart elec_bot_client",
+    "log": "pm2 logs --lines 200 elec_bot_client"
   },
   "author": "",
   "license": "ISC",
