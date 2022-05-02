@@ -7,24 +7,12 @@ const convert = require('xml-js');
 const mysql = require('mysql');
 const db = require('./config/db');
 
-let connection;
-function handleError () {
-    connection = mysql.createConnection(db.mysql);
-    connection.connect(function (err) {
-        if (err) {
-            console.log('error when connecting to db:', err);
-            setTimeout(handleError , 2000);
-        } else {
-            console.log('Connected to MySQL');
-        }
-    });
-    //监听错误
-    connection.on('error', function (err) {
-        if (err.code === 'PROTOCOL_CONNECTION_LOST') handleError();
-        else throw err;
-    });
-}
-handleError();
+const connection = mysql.createConnection(db.mysql);
+connection.connect(function (err) {
+    if (err) console.log('error when connecting to db:', err);
+    else console.log('Connected to MySQL');
+});
+connection.destroy();
 
 const url = process.env.QUERY_URL;
 
@@ -48,12 +36,17 @@ const getRemainPower = () => {
         const remainPower = json.resultHKRemainPower.remainPower._text;
         const date = new Date().toISOString();
         const params = { remain_power: Number(remainPower).toFixed(2), date: date };
+        const connection = mysql.createConnection(db.mysql);
+        connection.connect((err) => {
+            if (err) console.log('error when connecting to db:', err);
+        });
         connection.query('insert into elec_record set ?', params, (err) => {
             if (err) {
                 console.log(err);
             } else {
                 console.log(`Inserted successfully, current remain power is ${remainPower}`);
             }
+            connection.destroy();
         })
     })
 }
